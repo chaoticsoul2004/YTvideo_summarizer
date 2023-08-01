@@ -41,7 +41,7 @@ if user_input and button:
     tokenized = tokenizer(transcript, truncation=True,
                           padding='longest', return_tensors='pt')
     tokenized = {k: v.to(device) for k, v in tokenized.items()}
-    tokenized_result = model.generate(**tokenized, max_length=128)
+    tokenized_result = model.generate(**tokenized, max_length=250)
     tokenized_result = tokenized_result.to('cpu')
     predicted_summary = tokenizer.decode(tokenized_result[0])
     st.write(predicted_summary)
