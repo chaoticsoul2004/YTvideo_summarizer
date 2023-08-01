@@ -35,7 +35,7 @@ button = st.button("summarize")
 if user_input and button:
     id = video_id(user_input)
     transcript = transcript(id)
-
+    st.write(transcript)
     device = model.device
 
     tokenized = tokenizer(transcript, truncation=True,
