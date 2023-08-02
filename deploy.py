@@ -27,10 +27,38 @@ def get_model():
     return tokenizer, model
 
 
+def get_model_trans():
+    tokenizer = AutoTokenizer.from_pretrained('t5-small')
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        'Mayank1309/my_model')
+    return tokenizer, model
+
+
 tokenizer, model = get_model()
+tokenizer, translator = get_model_trans()
+
 
 user_input = st.text_area('enter the link for the video you want to summarize')
 button = st.button("summarize")
+
+
+# button2 = st.button("press to translate to french")
+
+def translate(document):
+    device = model.device
+#   document = document.replace("</s>", "").replace("</pad>", "")
+#   special_tokens_dict = {'additional_special_tokens': ['</s>', '</pad>']}
+
+#   tokenizer.add_special_tokens(special_tokens_dict)
+    document = document.replace("</s>", "").replace("<pad>", "")
+    tokenized = tokenizer([document], truncation=True,
+                          padding='longest', return_tensors='pt')
+    tokenized = {k: v.to(device) for k, v in tokenized.items()}
+    tokenized_result = translator.generate(**tokenized, max_length=128)
+    tokenized_result = tokenized_result.to('cpu')
+    translated = tokenizer.decode(tokenized_result[0])
+    return translated
+
 
 if user_input and button:
     id = video_id(user_input)
@@ -45,3 +73,6 @@ if user_input and button:
     tokenized_result = tokenized_result.to('cpu')
     predicted_summary = tokenizer.decode(tokenized_result[0])
     st.write(predicted_summary)
+    st.write("\n")
+    st.write("french: ")
+    st.write(translate(predicted_summary))
