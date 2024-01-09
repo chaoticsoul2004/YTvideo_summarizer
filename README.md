@@ -21,7 +21,7 @@ cd YTVideo_summarizer
 ```
 Run the Streamlit application:
 ```bash
-streamlit run Deploy.py
+streamlit run deploy.py
 ```
 ## Acknowledgments
     -The project uses the T5 transformer model, developed by Google Research.
